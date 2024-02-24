@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     function checkWin(){
         for(let i = 0; i<size; i++){
             for(let j = 0; j<size; j++){
-                if(board[i][j] == 64 && !continuePlay){
+                if(board[i][j] == 2048 && !continuePlay){
                     celebration.style.display = 'flex'
                     done.style.display = 'flex'
                 }
