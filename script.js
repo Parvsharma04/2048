@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', ()=>{
     const grid = document.querySelector('.grid')
+    const done = document.querySelector('#game-finished')
+    const heading = document.querySelector('.heading')
+    let continuePlay = false
     const size = 4
+    const celebration = document.querySelector('.confetti')
     let board = []
     let currentScore = 0
     const currentScoreEle = document.getElementById('current-score')
@@ -14,7 +18,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         currentScore+=value
         currentScoreEle.textContent = currentScore
 
-        if(currentScore > highscore){
+        if(currentScore > highScore){
             highScore = currentScore
             highScoreEle.textContent = highScore
             localStorage.setItem('2048-highscore', highScore)
@@ -36,51 +40,51 @@ document.addEventListener('DOMContentLoaded', ()=>{
         renderBoard()
     }
 
-    function renderBoard(){
-        for(let i = 0; i<size;  i++){
-            for(let j = 0; j<size; j++){
-                const cell = document.querySelector(`[data-row="${i}"] [data-column="${j}"]`)
-                const preValue = cell.dataset.value
-                const currentValue = board[i][j]
-
-                if(cell.dataset.value !== 0){
-                    cell.dataset.value = currentValue
-                    cell.currentValue = currentValue
-
-                    if(currentValue !== parseInt(preValue) && !cell.classList.contains('new-tile')){
-                        cell.classList.add('merged-tile')
+    function renderBoard() {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+                const prevValue = cell.dataset.value;
+                const currentValue = board[i][j];
+                if (currentValue !== 0) {
+                    cell.dataset.value = currentValue;
+                    cell.textContent = currentValue;
+                    // Animation handling
+                    if (currentValue !== parseInt(prevValue) && !cell.classList.contains('new-tile')) {
+                        cell.classList.add('merged-tile');
                     }
-                }
-                else{
-                    cell.textContent = ''
-                    delete cell.dataset.value
-                    cell.classList.remove('merged-tile', 'new-tile')
+                } else {
+                    cell.textContent = '';
+                    delete cell.dataset.value;
+                    cell.classList.remove('merged-tile', 'new-tile');
                 }
             }
         }
 
+
         setTimeout(()=>{
-            const cells = document.querySelectorAll('grid-cell')
+            const cells = document.querySelectorAll('.grid-cell')
             cells.forEach(cell=>{
                 cell.classList.remove('merged-tile', 'new-tile')
             })
         }, 300)
     }
 
-    function placeRandom(){
-        const available = []
+    function placeRandom() {
+        const available = [];
         for (let i = 0; i < size; i++) {
-            for(let j = 0; j<size; j++){
-                if(board[i][j] === 0){
-                    available.push({x: i, y: j})
+            for (let j = 0; j < size; j++) {
+                if (board[i][j] === 0) {
+                    available.push({ x: i, y: j });
                 }
             }
         }
-        if(available.length > 0 ){
-            const randomCell = available[Math.floor(Math.random() * available.length)]
-            board[randomCell.x][randomCell.y] = Math.random() < 0.9 ? 2 : 4
-            const cell = document.querySelector(`[data-row="${randomCell.x}"] [data-column="${randomCell.y}"]`)
-            cell.classList.add('new-tile')
+
+        if (available.length > 0) {
+            const randomCell = available[Math.floor(Math.random() * available.length)];
+            board[randomCell.x][randomCell.y] = Math.random() < 0.9 ? 2 : 4;
+            const cell = document.querySelector(`[data-row="${randomCell.x}"][data-col="${randomCell.y}"]`);
+            cell.classList.add('new-tile'); // Animation for new tiles
         }
     }
 
@@ -112,26 +116,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
             placeRandom()
             renderBoard()
             checkGameOver()
+            checkWin()
         }
     }
 
-    function transform(line, moveTowardsStart){
-        let newLine = line.filter(cell => cell !== 0)
-        if(!moveTowardsStart){
-            newLine.reverse()
-        }
-        for(let i = 0; i<newLine.length - 1; i++){
-            if(newLine[i] === newLine[i+1]){
-                newLine *= 2
-                updateScore(newLine[i])
-                newLine.splice(i + 1, 1)
+    function checkWin(){
+        for(let i = 0; i<size; i++){
+            for(let j = 0; j<size; j++){
+                if(board[i][j] == 64 && !continuePlay){
+                    celebration.style.display = 'flex'
+                    done.style.display = 'flex'
+                }
             }
         }
-        while(newLine.length < size){
-            newLine.push(0)
+    }
+
+    function transform(line, moveTowardsStart) {
+        let newLine = line.filter(cell => cell !== 0);
+        if (!moveTowardsStart) {
+            newLine.reverse();
         }
-        if(!moveTowardsStart){
-            newLine.reverse()
+        for (let i = 0; i < newLine.length - 1; i++) {
+            if (newLine[i] === newLine[i + 1]) {
+                newLine[i] *= 2;
+                updateScore(newLine[i]); // Update score when tiles merged
+                newLine.splice(i + 1, 1);
+            }
+        }
+        while (newLine.length < size) {
+            newLine.push(0);
+        }
+        if (!moveTowardsStart) {
+            newLine.reverse();
         }
         return newLine;
     }
@@ -152,12 +168,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
     document.addEventListener('keydown', event=>{
-        if(['ArrowUp'], ['ArrowDown'], ['ArrowLeft'], ['ArrowRight'].includes(event.key)){
+        if(['ArrowUp' ,'ArrowDown' ,'ArrowLeft' ,'ArrowRight'].includes(event.key)){
             move(event.key)
         }
     })
-
+    function restartAfterWin(){
+            done.style.display = 'none';
+            celebration.style.display = 'none'
+            restart()
+    }
     document.getElementById('restart-btn').addEventListener('click', restart)
+    document.querySelector('.restart-btn').addEventListener('click', restartAfterWin)
 
+    document.querySelector('#continue-btn').addEventListener('click', ()=>{
+            done.style.display = 'none';
+            celebration.style.display = 'none'
+            continuePlay = true
+    })
     initializeGame()
 })

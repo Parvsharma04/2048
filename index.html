@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="confetti.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>2048</title>
 </head>
 <body>
+    <div class="heading">
+        <h1 class="animate__bounceIn">2048</h1>
+    </div>
     <div class="score-container">
         <div>Score: <span id="current-score">0</span></div>
         <div>High Score: <span id="high-score">0</span></div>
@@ -14,28 +19,49 @@
 
     <div class="game-container">
         <div class="grid">
-            <div class="cell" data-row="0" data-column="0"></div>
-            <div class="cell" data-row="0" data-column="1"></div>
-            <div class="cell" data-row="0" data-column="2"></div>
-            <div class="cell" data-row="0" data-column="3"></div>
-            <div class="cell" data-row="1" data-column="0"></div>
-            <div class="cell" data-row="1" data-column="1"></div>
-            <div class="cell" data-row="1" data-column="2"></div>
-            <div class="cell" data-row="1" data-column="3"></div>
-            <div class="cell" data-row="2" data-column="0"></div>
-            <div class="cell" data-row="2" data-column="1"></div>
-            <div class="cell" data-row="2" data-column="2"></div>
-            <div class="cell" data-row="2" data-column="3"></div>
-            <div class="cell" data-row="3" data-column="0"></div>
-            <div class="cell" data-row="3" data-column="1"></div>
-            <div class="cell" data-row="3" data-column="2"></div>
-            <div class="cell" data-row="3" data-column="3"></div>
+            <div class="cell" data-row="0" data-col="0"></div>
+            <div class="cell" data-row="0" data-col="1"></div>
+            <div class="cell" data-row="0" data-col="2"></div>
+            <div class="cell" data-row="0" data-col="3"></div>
+            <div class="cell" data-row="1" data-col="0"></div>
+            <div class="cell" data-row="1" data-col="1"></div>
+            <div class="cell" data-row="1" data-col="2"></div>
+            <div class="cell" data-row="1" data-col="3"></div>
+            <div class="cell" data-row="2" data-col="0"></div>
+            <div class="cell" data-row="2" data-col="1"></div>
+            <div class="cell" data-row="2" data-col="2"></div>
+            <div class="cell" data-row="2" data-col="3"></div>
+            <div class="cell" data-row="3" data-col="0"></div>
+            <div class="cell" data-row="3" data-col="1"></div>
+            <div class="cell" data-row="3" data-col="2"></div>
+            <div class="cell" data-row="3" data-col="3"></div>
         </div>
     </div>
 
     <div id="game-over">
         Game Over!
         <button id="restart-btn">Restart</button>
+    </div>
+    <div id="game-finished">
+        Congratulations, You did it!
+        <button class="restart-btn continue"> Restart</button>
+        <button id="continue-btn">Continue Playing</button>
+    </div>
+
+    <div class="confetti">
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
     </div>
     <script src="script.js"></script>
 </body>
