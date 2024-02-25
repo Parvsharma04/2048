@@ -185,5 +185,36 @@ document.addEventListener('DOMContentLoaded', ()=>{
             celebration.style.display = 'none'
             continuePlay = true
     })
+    let touchStartX = 0;
+
+    document.addEventListener('touchstart', (event) => {
+        touchStartX = event.touches[0].clientX;
+    });
+
+    document.addEventListener('touchend', (event) => {
+        const touchEndX = event.changedTouches[0].clientX;
+        const deltaX = touchEndX - touchStartX;
+
+        const swipeThreshold = 50; // You can adjust this threshold based on your needs
+
+        if (Math.abs(deltaX) > swipeThreshold) {
+            if (deltaX > 0) {
+                // Swipe right
+                move('ArrowRight');
+            } else {
+                // Swipe left
+                move('ArrowLeft');
+            }
+        }
+    });
+    document.getElementById('restart-btn').addEventListener('click', restart);
+
+    document.querySelector('.restart-btn').addEventListener('click', restartAfterWin);
+
+    document.querySelector('#continue-btn').addEventListener('click', () => {
+        done.style.display = 'none';
+        celebration.style.display = 'none';
+        continuePlay = true;
+    });
     initializeGame()
 })
