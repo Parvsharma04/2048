@@ -186,27 +186,47 @@ document.addEventListener('DOMContentLoaded', ()=>{
             continuePlay = true
     })
     let touchStartX = 0;
+    let touchStartY = 0;
 
     document.addEventListener('touchstart', (event) => {
         touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
     });
 
     document.addEventListener('touchend', (event) => {
         const touchEndX = event.changedTouches[0].clientX;
+        const touchEndY = event.changedTouches[0].clientY;
+
         const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
 
         const swipeThreshold = 50; // You can adjust this threshold based on your needs
 
-        if (Math.abs(deltaX) > swipeThreshold) {
-            if (deltaX > 0) {
-                // Swipe right
-                move('ArrowRight');
-            } else {
-                // Swipe left
-                move('ArrowLeft');
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Horizontal swipe
+            if (Math.abs(deltaX) > swipeThreshold) {
+                if (deltaX > 0) {
+                    // Swipe right
+                    move('ArrowRight');
+                } else {
+                    // Swipe left
+                    move('ArrowLeft');
+                }
+            }
+        } else {
+            // Vertical swipe
+            if (Math.abs(deltaY) > swipeThreshold) {
+                if (deltaY > 0) {
+                    // Swipe down
+                    move('ArrowDown');
+                } else {
+                    // Swipe up
+                    move('ArrowUp');
+                }
             }
         }
     });
+
     document.getElementById('restart-btn').addEventListener('click', restart);
 
     document.querySelector('.restart-btn').addEventListener('click', restartAfterWin);
